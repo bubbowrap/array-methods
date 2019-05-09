@@ -1,0 +1,156 @@
+<script src="../tinytest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+
+// Example 1:
+// Callback should run 3 times.
+// map([1,2,3], function() {});
+
+// Example 2:
+// Callback has access to ith element
+// map([1,2,3], function(num) {
+//   console.log(num);
+// });
+
+// Example 3:
+// Callback has access to index
+// map([1,2,3], function(num, index) {
+//   console.log(index);
+// });
+
+// Example 4:
+// Callback has access to orgArray
+// filter([1,2,3], function(num, index, orgArray) {
+//   console.log(orgArray);
+// });
+
+// Example 5:
+// optional 'this'
+// map([1,2,3], function() {
+//   console.log(this.name);
+// }, {name: 'Geromy'});
+
+// Example 6:
+// Creates a new array, makes sure it's diff from old one and not modifying it
+// var orgArray = [1,2,3];
+// var mappedArray = map(orgArray, function() {});  
+// orgArray !== mappedArray;
+
+// Example 7:
+// testing mapping functionality
+// var originalArray = [1,2,3];
+// var mappedArray = filter(orgArray, function(element) {
+//  return element * 2;
+// });  
+// Expected mappedArray = [2,4,6];
+
+  // function map(array, callback, optionalThisObject) {
+  //   var mapCallback = callback;
+  //   var mappedArray = [];
+  //   if(optionalThisObject) {
+  //     mapCallback = callback.bind(optionalThisObject);
+  //   }
+  //   for (var i = 0; i < array.length; i++) {
+  //     if(mapCallback(array[i], i, array)) {
+  //       mappedArray.push(mapCallback(array[i]));
+  //     }
+  //   }
+  //   return mappedArray;
+  // }
+
+    function map(array, callback, configurableThisObject) {
+      var mappedArray = [];
+      var mapCallback = callback;
+      if(configurableThisObject) {
+        mapCallback = callback.bind(configurableThisObject);
+      }
+      for(var i = 0; i < array.length; i++) {
+        if (i in array) {
+          //makes sure the value stays at the same place even if there's a zero
+          //mappedArray.push(mapCallback(array[i], i, array));
+          mappedArray[i] = mapCallback(array[i], i, array);
+
+        }
+        // if (mapCallback(array[i], i, array)) {
+        //   mappedArray.push(mapCallback(array[i]));
+        // }
+      }
+      return mappedArray;
+    }
+tests({
+
+//tests methods
+  'It should run the callback function array.length times': function() {
+    var numberOfTimesCallbackHasRun = 0;
+
+    map([1,2,3], function() {
+      numberOfTimesCallbackHasRun++;
+    });
+    eq(numberOfTimesCallbackHasRun, 3);
+  },
+  'It should pass in the ith element as the first argument to the callback': function() {
+    map([1], function(num) {
+      eq(num,1);
+    });  
+  },
+  'It should pass in position i as the second arg to the callback': function(){
+    map([1], function(num, index) {
+      eq(index, 0);
+    });
+  },
+  'It should pass in original array as third arg to callback': function(){
+    var testArray = [1,2,3];
+    map(testArray, function(num, index, orgArray) {
+      eq(orgArray, testArray);
+    })
+  },
+  'It should accept a configurable this object': function() {
+    map([1], function() {
+      //this should be equal to configurable this object
+      this.description = 'I am a configurable this object'
+      eq(this.description, 'I am a configurable this object');
+    }, {description: 'I am a configurable this object'}) 
+  },
+  'It should return an array': function() {
+      var mappedArray = map([], function() {});
+      eq(Array.isArray(mappedArray), true);
+  },
+  'It should return a new array not the original array': function() {
+    var testArray = [];
+    var mappedArray = map(testArray, function() {
+      eq(testArray !== mappedArray, true);
+    });
+  },
+  'Should return new array with items that have been transformed by callback': function() {
+    var testArray = [1,2,3,4];
+    var mappedArray = map(testArray, function(num) {
+      return num * 2;
+    });
+      eq(mappedArray.length, 4);
+      eq(mappedArray[0], 2);
+
+  },
+  'Skip unassigned indexes' : function() {
+    var testArray = [,1];
+    var mappedArray = map(testArray, function double(num) {
+      return num * 2;
+    });
+    console.log(mappedArray);
+    eq(0 in mappedArray, false);    
+    eq(mappedArray[1], 2);
+
+  }
+})
+//   'adds numbers': function() {
+//     eq(6, add(2, 4));
+//     eq(6.6, add(2.6, 4));
+//   },
+
+//   'subtracts numbers': function() {
+//     eq(-2, add(2, -4));
+//   },
+
+// });
+</script>
+
+

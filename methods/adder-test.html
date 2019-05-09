@@ -1,0 +1,101 @@
+<script src="../tinytest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+
+  function forEach(array, callback, optionalThisObject) {
+    var forEachCallback = callback;
+    if(optionalThisObject) {
+      forEachCallback = callback.bind(optionalThisObject);
+    }
+    for (var i = 0; i < array.length; i++) {
+      forEachCallback(array[i], i, array);
+
+    }
+  }
+
+tests({
+
+// Example 1:
+// forEach([1,2,3], function() {
+//   console.log('hi');
+// });
+
+// Example 2:
+// forEach([1,2,3], function(num) {
+//   console.log(num);
+// });
+
+// Example 3:
+// The index of the current element being processed in the array.
+// forEach([1,2,3], function(num, index) {
+//   console.log(index);
+// });
+
+// Example 4:
+// The array forEach() was called upon.
+// forEach([1,2,3], function(num, index, orgArray) {
+//   console.log(orgArray);
+// });
+
+//tests methods
+  'It should run the callback function array.length times': function() {
+    var numberOfTimesCallbackHasRun = 0;
+    var arr = [1,2,3];
+
+    forEach([1,2,3], function() {
+      numberOfTimesCallbackHasRun++;
+    });
+    eq(numberOfTimesCallbackHasRun, 3);
+  },
+  'It should pass in the ith element as the first argument to the callback': function() {
+    forEach([1], function(num) {
+      eq(num,1);
+    });  
+  },
+  'It should pass in position i as the second arg to the callback': function(){
+    forEach([1], function(num, index) {
+      //index === 0;
+      eq(index, 0);
+    });
+  },
+  'It should pass in original array as third arg to callback': function(){
+    var testArray = [1,2,3];
+    forEach(testArray, function(num, index, orgArray) {
+      eq(orgArray, testArray);
+    })
+  },
+  'It should accept a configurable this object': function() {
+    forEach([1], function() {
+      //this should be equal to configurable this object
+      //this.description = 'configurable this object'
+      eq(this.description, 'I am a configurable this object');
+    }, {description: 'I am a configurable this object'}) 
+    }
+});
+
+
+//   'adds numbers': function() {
+//     eq(6, add(2, 4));
+//     eq(6.6, add(2.6, 4));
+//   },
+
+//   'subtracts numbers': function() {
+//     eq(-2, add(2, -4));
+//   },
+
+// });
+</script>
+
+<!-- function forEach(array, callback, optionalThisObject) {
+
+  var forEachCallback = callback;
+
+  if (optionalThisObject) {
+    //we want to bind configurableThisObject to the calback function
+    forEachCallback = callback.bind(optionalThisObject);
+  }
+  for (var i = 0; i < array.length; i++) {
+    forEachCallback(array[i], i, array);
+  }
+
+} -->

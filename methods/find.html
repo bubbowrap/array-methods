@@ -1,0 +1,115 @@
+<script src="../simpletest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+//PROTOTYPE IMPLEMENTATION:
+//function find(array, callback, optionalThis) {
+//  if (optionalThis) {
+//    callback.bind()
+//  }
+//  for (var i = 0; i < array.length; i++) {
+//    return callback();
+//  }
+//}
+
+//FUNCTION SIGNATURE:
+// find(array, callback);
+//callback accepts:
+
+//callback (element, index, array)
+
+// Example 1:
+// make sure runs method array.length times
+// find([1,2,3], function() {
+// console.log('hi');
+// });
+
+// Example:
+// should return the ith element as the first arg in the callback
+// find([1], function(num) {
+// console.log(num);
+// })
+
+// Example: 
+// should return the index of current el being processed
+// find([1], function(num, index) {
+//  console.log(index);
+// })
+
+// Example:
+// should only return the FIRST element it finds
+// find([1,2,3,4], function(num, index) {
+// return num % 2 == 0; (should return 2)
+//})
+// Example:
+// Otherwise, should return undefined
+// find([1], function(num, index, array) {
+//  console.log(index);
+// })
+
+//EDGE CASES:
+//account for holes
+//account for empty arrays
+//account for NaN/null/undefined
+//shouldn't touch items that have been appended to initial array
+//shouldn't mutate(?)
+
+function find(array, callback, optionalThis) {
+  var findCallback = callback;
+
+  if (optionalThis) {
+    findCallback = callback.bind(optionalThis);
+  }
+  for (var i = 0; i < array.length; i++) {
+    if (findCallback(array[i], i, array)) {
+      return array[i];
+    }
+    //if array[i] is equal to the callback, return it 
+  }
+}
+
+tests({
+
+//tests methods
+  'It should run the callback function array.length times': function() {
+    var counter = 0;
+
+    find([1,2,3], function() {
+      counter++;
+    });
+    eq(counter, 3);
+  },
+  'should return the index of current el being processed': function() {
+    find([1], function(num) {
+      eq(num, 1);
+    });  
+  },
+  'It should pass in position i as the second arg to the callback': function(){
+    find([1], function(num, index) {
+      eq(index, 0);
+    });
+  },
+  'It should pass in original array as third arg to callback': function(){
+    var testArray = [1,2,3];
+    find(testArray, function(num, index, orgArray) {
+      eq(orgArray, testArray);
+    })
+  },
+  'It should accept a configurable this object': function() {
+    find([1], function() {
+      eq(this.description, 'I am a configurable this object');
+    }, {description: 'I am a configurable this object'})
+  },
+  'It should return -only- the first item that fits the condition': function() {
+    var findThat = find([2,1,4,3,6,2], function(num) {
+      return num % 2 === 0;
+    });
+    eq(findThat, 2);
+  },
+  'if nothing fits condition, should return undefined': function() {
+    var findThat = find([1,3,5,7], function(num) {
+      return num % 2 === 0;
+    });
+    eq(findThat, undefined);
+  }
+})
+</script>

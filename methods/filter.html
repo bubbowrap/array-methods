@@ -1,0 +1,141 @@
+<script src="../tinytest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+
+// Example 1:
+// make sure runs method array.length times
+// filter([1,2,3], function() {
+// });
+
+// Example 2:
+// the number of current method has access to number
+// filter([1,2,3], function(num) {
+//   console.log(num);
+// });
+
+// Example 3:
+// The index of the current element being processed in the array.
+// filter([1,2,3], function(num, index) {
+//   console.log(index);
+// });
+
+// Example 4:
+// The array filter() was called upon.
+// filter([1,2,3], function(num, index, orgArray) {
+//   console.log(orgArray);
+// });
+
+// Example 5:
+// should accept 'this', makes sure configurable this works
+// filter([1,2,3], function() {
+//   console.log(this.name);
+// }, {name: 'Geromy'});
+
+// Example 6:
+// Creates a new array, makes sure it's diff from old one and not modifying it
+// var testArray = [1,2,3];
+// var filteredArray = filter(testArray, function() {});  
+// testArray !== filteredArray;
+
+// Example 7:
+// testing filtering functionality
+// var testArray = [1,2,3];
+// var filteredArray = filter(testArray, function(element) {
+//  return element > 1;
+// });  
+// Expected filteredArray = [2.3];
+
+  function filter(array, callback, optionalThisObject) {
+    var filterCallback = callback;
+    var filteredArray = [];
+    if(optionalThisObject) {
+      filterCallback = callback.bind(optionalThisObject);
+    }
+    for (var i = 0; i < array.length; i++) {
+      if(filterCallback(array[i], i, array)) {
+        filteredArray.push(array[i]);
+      }
+    }
+    return filteredArray;
+  }
+
+tests({
+
+//tests methods
+  'It should run the callback function array.length times': function() {
+    var numberOfTimesCallbackHasRun = 0;
+    // var arr = [1,2,3];
+
+    filter([1,2,3], function() {
+      numberOfTimesCallbackHasRun++;
+    });
+    eq(numberOfTimesCallbackHasRun, 3);
+  },
+  'It should pass in the ith element as the first argument to the callback': function() {
+    filter([1], function(num) {
+      eq(num,1);
+    });  
+  },
+  'It should pass in position i as the second arg to the callback': function(){
+    filter([1], function(num, index) {
+      eq(index, 0);
+    });
+  },
+  'It should pass in original array as third arg to callback': function(){
+    var testArray = [1,2,3];
+    filter(testArray, function(num, index, orgArray) {
+      eq(orgArray, testArray);
+    })
+  },
+  'It should accept a configurable this object': function() {
+    filter([1], function() {
+      //this should be equal to configurable this object
+      this.description = 'I am a configurable this object'
+      eq(this.description, 'I am a configurable this object');
+    }, {description: 'I am a configurable this object'}) 
+  },
+  'It should return an array': function() {
+      var filteredArray = filter([], function() {});
+      eq(Array.isArray(filteredArray), true);
+  },
+  'It should return a new array not the array being filtered': function() {
+    var testArray = [];
+    var filteredArray = filter(testArray, function() {
+      eq(testArray !== filteredArray, true);
+    });
+  },
+  'Should return new array with items where callback returns true': function() {
+    var testArray = [1,2,3,4];
+    var filteredArray = filter(testArray, function(num) {
+      return num > 2;
+    });
+      eq(filteredArray.length, 2);
+      eq(filteredArray[0], 3);
+
+  }
+})
+//   'adds numbers': function() {
+//     eq(6, add(2, 4));
+//     eq(6.6, add(2.6, 4));
+//   },
+
+//   'subtracts numbers': function() {
+//     eq(-2, add(2, -4));
+//   },
+
+// });
+</script>
+
+<!-- function forEach(array, callback, optionalThisObject) {
+
+  var forEachCallback = callback;
+
+  if (optionalThisObject) {
+    //we want to bind configurableThisObject to the calback function
+    forEachCallback = callback.bind(optionalThisObject);
+  }
+  for (var i = 0; i < array.length; i++) {
+    forEachCallback(array[i], i, array);
+  }
+
+} -->
