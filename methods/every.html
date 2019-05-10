@@ -62,25 +62,25 @@ function every(array, callback, optionalThis) {
   var everyCallback = callback;
   var length = array.length;
   var falseArray = 0;
-//  var arrayIndexes = Object.keys(array);
-
+  // var arrayIndexes = Object.keys(array);
   if (optionalThis) {
     everyCallback = callback.bind(optionalThis);
   }
   for (var i = 0; i < length; i++) {
     if(!everyCallback(array[i], i, array)){   
+      // if there's a hole, skip it
       if (array[i] !== undefined) {
         falseArray++;
       }
     }
-
-// if there's a hole, skip it
   }
+  
   if (falseArray > 0) {
     return false;
   }
+
   return true;
-  
+
 }
 
 
