@@ -1,0 +1,155 @@
+<script src="../simpletest.js"></script>
+<script>
+//SUMMARY:
+// The every() method tests whether all elements in the array pass the test implemented by the provided function. It returns a Boolean value. Should return true for empty arrays
+
+//PROTOTYPE IMPLEMENTATION:
+//  every(array, function({
+//  var everyCallback = callback;
+//  var length = array.length;
+//    if (optionalThis) {
+//       everyCallback = callback.bind(optionalThis);
+//    }
+//  for (var i = 0; i < length; i++) {
+//    everyCallback(array[i], i, array);
+//  }
+
+//  }), optionalThis);
+
+//FUNCTION SIGNATURE:
+// every(array, callback);
+
+
+//callback accepts:
+//callback (element, index, array)
+
+// Example 1:
+// make sure runs method array.length times
+
+// Example 2:
+// should return the ith element as the first arg in the callback
+
+// Example 3: 
+// should return the index of current el being processed
+
+// Example:
+// Should accept array in callback
+
+// Example:
+// should only return true if every item in array pass callback
+
+// Example:
+// should return false if any item doesn't
+
+//Example:
+// If array is empty, return true
+
+// Example:
+// If holes in array, skip over
+
+//Example:
+// if undefined or NaN in array, return false
+
+//EDGE CASES:
+//account for holes
+//account for empty arrays
+//account for NaN/null/undefined
+//shouldn't touch items that have been appended to initial array
+//shouldn't mutate(?)
+// should still process items that have been deleted
+
+function every(array, callback, optionalThis) {
+  var everyCallback = callback;
+  var length = array.length;
+  var falseArray = 0;
+//  var arrayIndexes = Object.keys(array);
+
+  if (optionalThis) {
+    everyCallback = callback.bind(optionalThis);
+  }
+  for (var i = 0; i < length; i++) {
+    if(!everyCallback(array[i], i, array)){   
+      if (array[i] !== undefined) {
+        falseArray++;
+      }
+    }
+
+// if there's a hole, skip it
+  }
+  if (falseArray > 0) {
+    return false;
+  }
+  return true;
+  
+}
+
+
+tests({
+
+//tests methods
+  'Make sure runs method array.length times': function() {
+    var counter = 0;
+    every([1,2], function(){
+      counter++;
+    });
+    eq(counter, 2);
+  },
+  'Should return the ith element as the first arg in the callback': function() {
+    every([1], function(num){
+      eq(num, 1);
+    });
+  },
+  'Should return the index of current el being processed': function() {
+    every([1], function(num, index){
+      eq(index, 0);
+    });  
+    },
+  'It should pass in original array as third arg to callback': function() {
+    var orgArray = [1,2,3];
+    every(orgArray, function(num, index, array){
+      eq(orgArray, array);
+    });
+  },
+  'It should accept a configurable this object': function() {
+    every([1], function(){
+      eq(this.description, 'Configurable this object');
+    }, {description: 'Configurable this object'});  
+  },
+  'Should only return true if every item in array pass callback': function() {
+    var testThat = every([1,2,3], function(num) {
+      return num > 0;
+    });
+    eq(testThat, true);
+  },
+  'should return false if any item doesn\'t pass callback': function() {
+    var testThat = every([1,2,3], function(num) {
+      return num > 2;
+    });
+    eq(testThat, false);
+  },
+  'If array is empty, return true': function() {
+    var testThat = every([], function(num) {
+      return num < 2;
+    });
+    eq(testThat, true);  
+  },
+  'If holes in array, skip over': function() {
+    var testThat = every([,,,,,], function(num) {
+      return num;
+    });
+    eq(testThat, true);
+  },
+  'if undefined or NaN in array, return false': function() {
+    var testThat = every([2,4,5,NaN], function(num) {
+      return num;
+    });
+    eq(testThat, false);  
+    },
+  'if null, return false': function() {
+    var testThat = every([2,4,null,5], function(num) {
+      return num;
+    });
+    eq(testThat, false);    
+  }
+})
+</script>
