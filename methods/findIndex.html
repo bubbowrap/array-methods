@@ -58,6 +58,7 @@
 //account for NaN/null/undefined
 //shouldn't touch items that have been appended to initial array
 //shouldn't mutate(?)
+// should still process items that have been deleted
 
 function findIndex(array, callback, optionalThis) {
   var findCallback = callback;
@@ -143,15 +144,13 @@ tests({
     eq(orgArray === orgArray, true);  
   },
   'Elements that are deleted are still visited': function() {
-    var orgArray = [1,2,3,4,5,7,9];
-    var newArray = [];
+    var orgArray = [2,1,,3,4,5,7,9];
     var findThat = findIndex(orgArray, function(num) {
-      orgArray.shift(0,1);
+      orgArray.shift();
       return num % 2 === 0;
     });
     console.log(orgArray);
-
-    eq(findThat, 1);  
+    eq(findThat, 0);  
   },
   'Shouldn\'t touch items that have been appended to the array': function() {
     var orgArray = [1,5,7,9];
