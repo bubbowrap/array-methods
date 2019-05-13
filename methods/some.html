@@ -1,0 +1,156 @@
+<script src="../simpletest.js"></script>
+<script>
+//SUMMARY:
+//The some() method tests whether at least one element in the array passes the test implemented by the provided function. It returns a Boolean value.
+
+//PROTOTYPE IMPLEMENTATION:
+//  some(array, function({
+//  var someCallback = callback;
+//  var length = array.length;
+//    if (optionalThis) {
+//       someCallback = callback.bind(optionalThis);
+//    }
+//  for (var i = 0; i < length; i++) {
+//    someCallback(array[i], i, array);
+//  }
+
+//  }), optionalThis);
+
+//FUNCTION SIGNATURE:
+// some(array, callback);
+
+
+//callback accepts:
+//callback(element, index, array)
+
+// Example: 
+// If it finds an item that evalutes to true, exit immediately
+
+// Example:
+// should return the ith element as the first arg in the callback
+
+// Example: 
+// should return the index of current el being processed
+
+// Example:
+// Should accept array in callback
+
+// Example:
+// should immediately return true if item fits callback
+
+// Example:
+// should return false if nothing fits
+
+//Example:
+// If array is empty, return false
+
+// Example:
+// If holes in array, skip over
+
+//Example:
+// if undefined or NaN in array, skip over
+
+//EDGE CASES:
+//account for holes
+//account for empty arrays
+//account for NaN/null/undefined
+//shouldn't touch items that have been appended to initial array
+//shouldn't mutate(?)
+// If an existing, unvisited element of the array is changed by callback, its value passed to the visiting callback will be the value at the time that some() visits that element's index.
+//elements that are deleted are not  visited.
+
+function some(array, callback, optionalThis) {
+  var someCallback = callback;
+  var length = array.length;
+  var trueItem = 0;
+  // var arrayIndexes = Object.keys(array);
+  if (optionalThis) {
+    someCallback = callback.bind(optionalThis);
+  }
+  for (var i = 0; i < length; i++) {
+    if (someCallback(array[i], i, array)) {
+      if (array[i] !== undefined) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+
+tests({
+
+//tests methods
+
+  'If it finds an item that evalutes to true, exit immediately': function() {
+    var counter = 0;
+    some([1,2,3,4,5,6], function(num){
+      if (num > 5) {
+        counter++;
+      }
+    });
+    eq(counter, 1);
+  },
+  'Should return the ith element as the first arg in the callback': function() {
+    some([1], function(num){
+      eq(num, 1);
+    });
+  },
+  'Should return the index of current el being processed': function() {
+    some([1], function(num, index){
+      eq(index, 0);
+    });  
+    },
+  'It should pass in original array as third arg to callback': function() {
+       var orgArray = [1,2,3];
+    some(orgArray, function(num, index, array){
+      eq(orgArray, array);
+    });
+  },
+  'It should accept a configurable this object': function() {
+    some([1], function(){
+      eq(this.description, 'Configurable this object');
+    }, {description: 'Configurable this object'});  
+  },
+  'Should return true if any items passes': function() {
+    var testThat = some([1,2,3], function(num) {
+      return num > 0;
+    });
+    eq(testThat, true);
+  },
+  'should return false if any item doesn\'t pass callback': function() {
+    var testThat = some([1,2,,,,], function(num) {
+      return num > 2;
+    });
+    eq(testThat, false);
+  },
+  'If array is empty, return false': function() {
+
+    var testThat = some([], function(num) {
+      return num < 2;
+    });
+    eq(testThat, false);  
+  },
+  'If holes in array, skip over': function() {
+    var testThat = some([,,,,,], function(num) {
+      return num;
+    });
+    eq(testThat, false);
+  },
+  'If an existing, unvisited element of the array is changed by callback, its value passed to the visiting callback will be the value at the time that some() visits that elements index': function() {
+    var tArray = [2,0,2];
+    var testThat = some(tArray, function(num) {
+      tArray[2]++;
+      return num > 2;
+    });
+    eq(testThat, true);
+  },
+  'elements that are deleted are not visited' : function() {
+    var tArray = [1,0,,,,4];
+    var testThat = some(tArray, function(num) {
+      tArray.pop();
+      return num > 2;
+    });
+    eq(testThat, false);  }
+})
+</script>
