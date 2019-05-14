@@ -82,7 +82,6 @@ function concat(array, ...args) {
   //checks if there are arguments, otherwise it just returns the array passed in
   if (args) {
       for (var i = 0; i < args.length; i++) {
-        debugger;
         if (Array.isArray(args[i])) {
           for (var j = 0; j < args[i].length; j++) {
             concatArray.push(args[i][j]);
@@ -114,14 +113,32 @@ tests ({
     } 
     eq(isTypeError, false);
   },
-  'should check if next arguments are an array, if so loop through and push each number individually.': function(){
+  'should check if argument is an array if so loop through and push each number individually.': function(){
     var orgArray = [1,2];
     var newArray = concat(orgArray, [3,4]);
     eq(newArray[2], 3);
   },
-  'hey': function(){
-    fail();
-  }
+  'should check if argument is string/number/boolean, and if so just push it to the new array': function(){
+    var orgArray = [1,2];
+    var newArray = concat(orgArray, true);
+    eq(newArray[2], true);  
+  },
+  'If original array is empty, append anyway': function() {
+
+  },
+  'If no arguments, return original array': function() {
+
+
+  },
+  'should not modify the original arrays': function() {
+    var orgArray = [1,2];
+    var newArray = concat(orgArray, 'hey', 1);
+    eq(orgArray === orgArray, true);  
+  },
+  'should concatenate nested arrays': function() {
+
+  },
+
 });
 
 </script>
