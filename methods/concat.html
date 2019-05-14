@@ -67,24 +67,32 @@
 // Concatenating array(s)/value(s) will leave the originals untouched. Furthermore, any operation on the new array (except operations on elements which are object references) will have no effect on the original arrays, and vice versa.
 //It does not recurse into nested array arguments.
 
-function concat(array, arguments) {
+function concat(array, ...args) {
+  var concatArray = [];
+
+  //checks if first arg is an array, otherwise it throws an error
   if (Array.isArray(array)) {
-    var currentArray = array;
+    for (var i = 0; i < array.length; i++) {
+      concatArray.push(array[i]);
+    }
   } else {
     throw new TypeError('TypeError: first argument is not an array');
   }
-// should loop through items and return them if array; otherwise, just return the value and push to array
-  // for (var i = 0; i < arguments.length; i++) {
-  //   arguments;
-  // }
-  // if (i.isArray) {
-  //   for (var j = 0; j < j.length; j++) {
-  //     currentArray.push(j);
-  //   }
-  // } else {
-  //   currentArray.push(i);
-  // }
-  return currentArray;
+
+  //checks if there are arguments, otherwise it just returns the array passed in
+  if (args) {
+      for (var i = 0; i < args.length; i++) {
+        debugger;
+        if (Array.isArray(args[i])) {
+          for (var j = 0; j < args[i].length; j++) {
+            concatArray.push(args[i][j]);
+          }
+        } else {
+          concatArray.push(args[i]);
+        }
+    }
+  }
+  return concatArray;
 // 
 }
 
@@ -97,7 +105,7 @@ tests ({
     console.log(newArray);
     eq(orgArray !== newArray, true);
   },
-  'Should pass in an array as the first argument': function(){
+  'Should pass in an array as the first argument, else throws error': function(){
     var isTypeError = false;
     try {      
       concat([1,2]);
@@ -106,14 +114,11 @@ tests ({
     } 
     eq(isTypeError, false);
   },
-  // 'should loop through all arguments': function(){
-  //   concat(new)
-
-  // },
-  // 'hey': function(){
-  //   fail();
-
-  // },
+  'should check if next arguments are an array, if so loop through and push each number individually.': function(){
+    var orgArray = [1,2];
+    var newArray = concat(orgArray, [3,4]);
+    eq(newArray[2], 3);
+  },
   'hey': function(){
     fail();
   }
