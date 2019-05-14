@@ -58,11 +58,11 @@
 // Notes: Object.keys([,,,,]).length === 0;
 
 function reduceRight(array, callback, initialValue) {
-  var startingIndex = 0;
+  var startingIndex = array.length - 1;
   var resultsSoFar = initialValue;
   var length = array.length;
   var arrayIndexes = Object.keys(array);
-  // if no initialValue, if not set startingIndex + i to 1. reduce(arguments) 
+  // if no initialValue, if not set startingIndex to last item in array. reduceRight(arguments) 
   if (arguments.length < 3) {
     // Array is empty, throw TypeError
     if(arrayIndexes.length === 0) {
@@ -76,21 +76,26 @@ function reduceRight(array, callback, initialValue) {
     }
 
     //We want to skip holes at the beginning of the array
-    while(startingIndex in array === false && startingIndex < length) {
-      startingIndex++;
+    //if it's a hole and index is less than the length then go lower
+    while(startingIndex in array === false && startingIndex > 0) {
+      startingIndex--;
     }
 
     resultsSoFar = array[startingIndex];
-    startingIndex++;
+    startingIndex--;
 
-    // Has initialValue;
+    // Has initialValue and nothing in array;
   } else {
     if(arrayIndexes.length === 0) {
       return initialValue;
     }
   }
-
-  for (var i = startingIndex; i < length; i++) {
+  // do {
+  //   var i = startingIndex;
+  //   resultsSoFar = callback(resultsSoFar, array[i], i, array);
+  //   i--;
+  // } while (i > -1);
+  for (var i = startingIndex; i >= 0; i--) {
     //if array has holes skip over it
     if (i in array) {
       resultsSoFar = callback(resultsSoFar, array[i], i, array);
@@ -125,104 +130,86 @@ tests({
       eq(previousValue, 0);
     }, 0);
   },
-  'If initialValue, currentValue should start with array[0]': function() {
-    fail();
+  'If initialValue, currentValue should start with last item in array': function() {
 
-    // reduce([1], function(previousValue, currentValue) {
-    //   eq(currentValue, 1);
-    // }, 0);
+    reduceRight([1], function(previousValue, currentValue) {
+      eq(currentValue, 1);
+    }, 0);
   },
-  'If initialValue, callback will start at index 0': function() {
-    fail();
+  'If initialValue, callback will start at last index in array': function() {
 
-    // reduce([1], function(previousValue, currentValue, currentIndex) {
-    //   eq(currentIndex, 0);
-    // }, 0);  
+    reduceRight([1], function(previousValue, currentValue, currentIndex) {
+      eq(currentIndex, 0);
+    }, 0);  
   },
-  'If no initialValue, previousValue should start with array[0]': function() {
-    fail();
+  'If no initialValue, previousValue should start with last item in array': function() {
 
-    // reduce([1,2], function(previousValue) {
-    //   eq(previousValue, 1);
-    // });  
+    reduceRight([1,2], function(previousValue) {
+      eq(previousValue, 2);
+    });  
   },
-  'If no initialValue, currentValue should start with array[1]': function() {
-    fail();
-
-    // reduce([1,2], function(previousValue, currentValue) {
-    //   eq(currentValue, 2);
-    // });  
+  'If no initialValue, currentValue should start with second to last item in array': function() {
+    reduceRight([1,2], function(previousValue, currentValue) {
+      eq(currentValue, 1);
+    });  
   },
-  'If no initialValue, callback will start at index 1': function() {
-    fail();
+  'If no initialValue, callback will start at second to last index in array': function() {
 
-    // reduce([1,2], function(previousValue, currentValue, currentIndex) {
-    //   eq(currentIndex, 1);
-    // });  
+    reduceRight([1,2], function(previousValue, currentValue, currentIndex) {
+      eq(currentIndex, 0);
+    });  
   },
 
   'If initialValue, and array is empty, return initialValue without calling callback': function() {
-    fail();
-
-    // var numberOfTimesCallbackHasRun = 0;
-    // var initialValue = 0;
-    // var reduceResult = reduce([,,], function() {
-    //   numberOfTimesCallbackHasRun++;
-    // }, initialValue);  
-    // eq(reduceResult, initialValue);
-    // eq(numberOfTimesCallbackHasRun, 0);
+    var numberOfTimesCallbackHasRun = 0;
+    var initialValue = 0;
+    var reduceRightResult = reduceRight([,,], function() {
+      numberOfTimesCallbackHasRun++;
+    }, initialValue);  
+    eq(reduceRightResult, initialValue);
+    eq(numberOfTimesCallbackHasRun, 0);
   },
   'If no initialValue, and array has one element, it should return that element without calling callback': function() {
-    fail();
-
-    // var numberOfTimesCallbackHasRun = 0;
-    // var reduceResult = reduce([1], function() {
-    //   numberOfTimesCallbackHasRun++;
-    //   eq(currentIndex, 1);
-    // });  
-    // eq(reduceResult, 1);
-    // eq(numberOfTimesCallbackHasRun, 0);
+    var numberOfTimesCallbackHasRun = 0;
+    var reduceRightResult = reduceRight([1], function() {
+      numberOfTimesCallbackHasRun++;
+      eq(currentIndex, 1);
+    });  
+    eq(reduceRightResult, 1);
+    eq(numberOfTimesCallbackHasRun, 0);
   },
   'It should actually reduce': function() {
-    fail();
-
-    // var reduceResult = reduce([1,2,3], function(a, b) {
-    //   return a + b;
-    // }, 0);  
-    // eq(reduceResult, 6);
+    var reduceRightResult = reduceRight([1,2,3], function(a, b) {
+      return a + b;
+    }, 0);  
+    eq(reduceRightResult, 6);
   }, 
   'If initialValue it should exclude holes': function() {
-    fail();
-
-    // var reduceResult = reduce([,1,,2,3,], function(a, b) {
-    //   return a + b;
-    // }, 0);  
-    // eq(reduceResult, 6);
+    var reduceRightResult = reduceRight([,1,,2,3,], function(a, b) {
+      return a + b;
+    }, 0);  
+    eq(reduceRightResult, 6);
   }, 
   'If no initialValue it should exclude holes too': function() {
-    fail();
-
-  //   var reduceResult = reduce([,,1,,2,3,], function(a, b) {
-  //     return a + b;
-  //   });  
-  //   eq(reduceResult, 6);
+    var reduceRightResult = reduceRight([,,1,,2,3,], function(a, b) {
+      return a + b;
+    });  
+    eq(reduceRightResult, 6);
   }, 
   'If array is empty, and no intialValue, throw typeError': function() {
-    fail();
-    // var isTypeError = false;
-    // try {
-    //   reduce([], function() {});
-    // } catch(e) {
-    //   isTypeError = (e instanceof TypeError);
-    // }  
-    // eq(isTypeError, true);
+    var isTypeError = false;
+    try {
+      reduceRight([], function() {});
+    } catch(e) {
+      isTypeError = (e instanceof TypeError);
+    }  
+    eq(isTypeError, true);
   },
   'It should pass array as fourth argument to callback': function() {
-    fail();
-    // var testArray = [1,2,3];
-    // reduce(testArray, function(previousValue, currentValue, currentIndex, arrayToReduce) {
-    //   eq(testArray, arrayToReduce);
-    // });  
+    var testArray = [1,2,3];
+    reduceRight(testArray, function(previousValue, currentValue, currentIndex, arrayToReduce) {
+      eq(testArray, arrayToReduce);
+    });  
     }
 });
 
