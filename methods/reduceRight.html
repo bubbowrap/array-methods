@@ -90,11 +90,7 @@ function reduceRight(array, callback, initialValue) {
       return initialValue;
     }
   }
-  // do {
-  //   var i = startingIndex;
-  //   resultsSoFar = callback(resultsSoFar, array[i], i, array);
-  //   i--;
-  // } while (i > -1);
+  
   for (var i = startingIndex; i >= 0; i--) {
     //if array has holes skip over it
     if (i in array) {
