@@ -124,10 +124,12 @@ tests ({
     eq(newArray[2], true);  
   },
   'If original array is empty, append anyway': function() {
-
+    var newArray = concat([], 2);
+    eq(newArray[0], 2);  
   },
   'If no arguments, return original array': function() {
-
+    var newArray = concat([1,2]);
+    eq(newArray[1], 2);  
 
   },
   'should not modify the original arrays': function() {
@@ -136,9 +138,14 @@ tests ({
     eq(orgArray === orgArray, true);  
   },
   'should concatenate nested arrays': function() {
-
+    var orgArray = [1,2];
+    var newArray = concat(orgArray, 'hey', [[1,2], 3]);
+    eq(newArray[3][0] === 1, true);  
   },
-
+  'should not recurse into nested array arguments': function() {
+    var newArray = concat([5], [2, [1, 5]]);
+    eq(Array.isArray(newArray[2]), true);
+  }
 });
 
 </script>
