@@ -47,7 +47,12 @@
 // should only return one item
 // should pass in an array as the first argument
 // if first arg is not an array, return type error: TypeError: element.concat is not a function
-// if optional whereToStart, should start from that point
+
+// If the index is greater than or equal to the length of the array, the whole array will be searched.
+// If negative, it is taken as the offset from the end of the array. 
+// even when the index is negative, the array is still searched from back to front. 
+// If the calculated index is less than 0, -1 is returned, i.e. the array will not be searched.
+
 // if original array is empty, return -1
 
 //COME BACK TO:
@@ -56,19 +61,25 @@
 // write throw error
 
 function lastIndexOf(array, elementToLocate, whereToStart) {
- var length = array.length;
-var startingIndex = array.length - 1;
-
+  var length = array.length;
+  var startingIndex = array.length - 1;
  if (whereToStart) {
    for (var i = whereToStart; i >= 0; i--) {
      if (array[i] === elementToLocate) {
-       return array[i];
+       return i;
      }
    }
+   if(whereToStart < 0) {
+    for (var i = startingIndex + whereToStart; i >= 0; i--) {
+      if (array[i] === elementToLocate) {
+        return i;
+      }
+    }
+   }
  } else {
-   for (var i = startingIndex; i >= 0; i--) {
-     if (array[i] === elementToLocate) {
-       return array[i];
+   for (var startingIndex; startingIndex >= 0; startingIndex--) {
+     if (array[startingIndex] === elementToLocate) {
+       return startingIndex;
      }
    }
  }
@@ -77,9 +88,9 @@ var startingIndex = array.length - 1;
 
 //tests methods
 tests ({
-  'It should return a number': function() {
-    var returnedIndex = lastIndexOf([1,2,3], 2);
-      eq(returnedIndex, 1);
+  'It should return last index of array': function() {
+    var returnedIndex = lastIndexOf([1,2,3,2], 2);
+      eq(returnedIndex, 3);
       eq(isNaN(returnedIndex), false);
   },
   'Should pass in an array as the first argument': function(){
@@ -94,22 +105,26 @@ tests ({
     var returnedIndex = lastIndexOf([1,2,3], 4);
     eq(returnedIndex, -1);
   },
-  'if optional whereToStart, should start from that point': function() {
-    var returnedIndex = indexOf([2,3,2], 2, 1);
+  'Should start searching from specified index': function() {
+    var returnedIndex = lastIndexOf([2,3,2,2], 2, 1);
+    eq(returnedIndex, 0);
+  },
+  'If the index is greater than or equal to the length of the array, the whole array will be searched.': function() {
+    var returnedIndex = lastIndexOf([2,3,2], 2, 8);
     eq(returnedIndex, 2);
   },
-  'if optional whereToStart, should start from that point and return -1 passing up earlier instance': function() {
-    var returnedIndex = indexOf([2,3,3,4], 2, 1);
-    eq(returnedIndex, -1);
+  'If negative, it is taken as the offset from the end of the array' : function() {
+    var returnedIndex = lastIndexOf([2,3,3,4,2], 2, -2);
+    eq(returnedIndex, 0);
   },
-  'if original array is empty, return -1': function() {
-    var returnedIndex = indexOf([], 2, 1);
-    eq(returnedIndex, -1);
+  'even when the index is negative, the array is still searched from back to front. ': function() {
+    var returnedIndex = lastIndexOf([1,2,3,2], 2, -1);
+    eq(returnedIndex, 1);
   },
 
-  'should not recurse into nested array arguments': function() {
-    fail();
-
+  'If the calculated index is less than 0, -1 is returned, i.e. the array will not be searched': function() {
+    var returnedIndex = lastIndexOf([1,2,3,2], 2, -9);
+    eq(returnedIndex, -1);
   }
 });
 
