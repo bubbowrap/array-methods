@@ -61,29 +61,30 @@
 // write throw error
 
 function lastIndexOf(array, elementToLocate, whereToStart) {
-  var length = array.length;
-  var startingIndex = array.length - 1;
- if (whereToStart) {
-   for (var i = whereToStart; i >= 0; i--) {
-     if (array[i] === elementToLocate) {
-       return i;
-     }
-   }
-   if(whereToStart < 0) {
-    for (var i = startingIndex + whereToStart; i >= 0; i--) {
+var length = array.length;
+var startingIndex = array.length - 1;
+if (whereToStart) {
+  if(whereToStart < 0) { 
+    for (var i=startingIndex + whereToStart; i>= 0; i--) {
       if (array[i] === elementToLocate) {
         return i;
       }
     }
-   }
- } else {
-   for (var startingIndex; startingIndex >= 0; startingIndex--) {
-     if (array[startingIndex] === elementToLocate) {
-       return startingIndex;
-     }
-   }
- }
- return -1;
+  } else {
+    for (var i = whereToStart; i >= 0; i--) {
+      if (array[i] === elementToLocate) {
+        return i;
+      }
+    }
+  }
+  } else {
+    for (var startingIndex; startingIndex >= 0; startingIndex--) {
+      if (array[startingIndex] === elementToLocate) {
+        return startingIndex;
+      }
+    }
+  }
+  return -1;
 }
 
 //tests methods
