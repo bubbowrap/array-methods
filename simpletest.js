@@ -49,7 +49,7 @@
         + successes + ' success' + (successes > 1 || successes === 0 ? 'es, ' : ', ')
         + failures  + ' failure' + (failures > 1 || failures === 0 ? 's.' : '.');
 
-        var summaryElement = document.createElement('h1');
+        var summaryElement = document.createElement('h4');
         summaryElement.textContent = summaryString;
         document.body.appendChild(summaryElement);
     }
@@ -75,7 +75,7 @@ var TinyTest = {
         }
         setTimeout(function() { // Give document a chance to complete
             if (window.document && document.body) {
-                document.body.style.backgroundColor = (failures == 0 ? '#99ff99' : '#ff9999');
+                document.body.style.backgroundColor = (failures == 0 ? '#99ff99' : '#fff');
                 TinyTestHelper.renderStats(tests, failures);
             }
         }, 0);

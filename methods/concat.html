@@ -1,0 +1,151 @@
+<script src="../simpletest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+
+//SUMMARY:
+
+// The concat() method is used to merge two or more arrays. This method does not change the existing arrays, but instead returns a new array.
+
+//PROTOTYPE IMPLEMENTATION:
+
+// function concat(array, arguments) {
+// var currentArray = array;
+// should loop through items and return them if array; otherwise, just return the value and push to array
+// for (var i = 0; i < arguments.length; i++) {
+// if (i.isArray) {
+//  for (var j = 0; j < j.length; j++) {
+//    currentArray.push(j);
+//  }
+// } else {
+//    currentArray.push(i);
+// }
+// return currentArray;
+// 
+// }
+
+//FUNCTION SIGNATURE (the way we want it to be called):
+
+// var newArray = concat(oldArray, [newValue], [newValue]);
+
+//CALLBACK PARAMS:
+
+// previousValue (accumulaor or initialValue)
+// currentValue 
+// index 
+// array (arr)
+
+//RETURN VALUE:
+
+// A new Array instance with all of the previous items.
+
+//REQUIREMENTS:
+
+// It should return a new array
+// 1. should loop through all arguments
+// 2. should pass in an array as the first argument
+// 3. if first arg is not an array, return type error: TypeError: element.concat is not a function
+// 4. should check if next arguments are an array, if so loop through and push each number individually.
+// 5. should check if argument is string/number/boolean, and if so just push it to the new array.
+// 6. should not modify the original arrays
+// 7. should concatenate nested arrays
+// 8. should concatenate nested arrays
+// 9. Concatenating array(s)/value(s) will leave the originals untouched.
+// 10. It does not recurse into nested array arguments.
+// 11. Any operation on the new array (except operations on elements which are object references) will have no effect on the original arrays, and vice versa.
+// 12. If original array is empty, append anyway.
+// 13. If no arguments, return original array.
+
+// should concat an array
+// should concat a string/number/boolean values
+// should concatenate nested arrays
+// // should concatenate nested arrays
+
+
+// The concat method does not alter this or any of the arrays provided as arguments but instead returns a shallow copy that contains copies of the same elements combined from the original arrays. Elements of the original arrays are copied into the new array as follows:
+// Object references (and not the actual object): concat copies object references into the new array. Both the original and new array refer to the same object. That is, if a referenced object is modified, the changes are visible to both the new and original arrays. This includes elements of array arguments that are also arrays.
+// Data types such as strings, numbers and booleans (not String, Number, and Boolean objects): concat copies the values of strings and numbers into the new array.
+// Concatenating array(s)/value(s) will leave the originals untouched. Furthermore, any operation on the new array (except operations on elements which are object references) will have no effect on the original arrays, and vice versa.
+//It does not recurse into nested array arguments.
+
+function concat(array, ...args) {
+  var concatArray = [];
+
+  //checks if first arg is an array, otherwise it throws an error
+  if (Array.isArray(array)) {
+    for (var i = 0; i < array.length; i++) {
+      concatArray.push(array[i]);
+    }
+  } else {
+    throw new TypeError('TypeError: first argument is not an array');
+  }
+
+  //checks if there are arguments, otherwise it just returns the array passed in
+  if (args) {
+      for (var i = 0; i < args.length; i++) {
+        if (Array.isArray(args[i])) {
+          for (var j = 0; j < args[i].length; j++) {
+            concatArray.push(args[i][j]);
+          }
+        } else {
+          concatArray.push(args[i]);
+        }
+    }
+  }
+  return concatArray;
+// 
+}
+
+
+//tests methods
+tests ({
+  'It should return a new array': function() {
+    var orgArray = [1,2];
+    var newArray = concat([orgArray]);
+    console.log(newArray);
+    eq(orgArray !== newArray, true);
+  },
+  'Should pass in an array as the first argument, else throws error': function(){
+    var isTypeError = false;
+    try {      
+      concat([1,2]);
+    } catch(e) {
+      isTypeError = (e instanceof TypeError);
+    } 
+    eq(isTypeError, false);
+  },
+  'should check if argument is an array if so loop through and push each number individually.': function(){
+    var orgArray = [1,2];
+    var newArray = concat(orgArray, [3,4]);
+    eq(newArray[2], 3);
+  },
+  'should check if argument is string/number/boolean, and if so just push it to the new array': function(){
+    var orgArray = [1,2];
+    var newArray = concat(orgArray, true);
+    eq(newArray[2], true);  
+  },
+  'If original array is empty, append anyway': function() {
+    var newArray = concat([], 2);
+    eq(newArray[0], 2);  
+  },
+  'If no arguments, return original array': function() {
+    var newArray = concat([1,2]);
+    eq(newArray[1], 2);  
+
+  },
+  'should not modify the original arrays': function() {
+    var orgArray = [1,2];
+    var newArray = concat(orgArray, 'hey', 1);
+    eq(orgArray === orgArray, true);  
+  },
+  'should concatenate nested arrays': function() {
+    var orgArray = [1,2];
+    var newArray = concat(orgArray, 'hey', [[1,2], 3]);
+    eq(newArray[3][0] === 1, true);  
+  },
+  'should not recurse into nested array arguments': function() {
+    var newArray = concat([5], [2, [1, 5]]);
+    eq(Array.isArray(newArray[2]), true);
+  }
+});
+
+</script>

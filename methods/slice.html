@@ -1,0 +1,148 @@
+<script src="../simpletest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+
+//SUMMARY:
+
+// Returns a shallow copy of a portion of an array into a new array object selected from begin to end (end not included). The original array will not be modified.
+
+// PROTOTYPE IMPLEMENTATION:
+
+// function slice(array, begin, end) {
+//  var length = array.length;
+//  var newArray = [];
+//  var beginIndex = begin < 0 ? length + begin : begin;
+//  var endIndex = end < 0 ? length + end : end;
+//  should loop through items starting at index
+//  if (begin) {
+//  var beginIndex = begin < 0 ? length + begin : begin;
+//    for (var i = beginIndex; i < length; i++) {
+//      newArray.push(array[i]);
+//    }
+//  } else {
+
+//  }
+//  return newArray;
+// }
+
+
+//FUNCTION SIGNATURE (the way we want it to be called):
+
+// slice(array, begin[optional], end[optional]);
+
+
+//RETURN VALUE:
+
+// A new array containing the extracted elements.
+
+//REQUIREMENTS:
+
+// should pass in an array as the first argument, else return error
+// should not alter the original array. It returns a shallow copy of elements from the original array
+// if no arguments in slice, return the array
+
+//BEGIN
+// If begin is undefined, slice begins from index 0.
+// If begin is greater than the length of the sequence, an empty array is returned.
+// A negative begin index can be used, indicating an offset from the end of the sequence. 
+
+//END
+// Zero-based index before which to end extraction. slice extracts up to but not including end.
+// A negative index can be used, indicating an offset from the end of the sequence. 
+// If end is omitted, slice extracts through the end of the sequence (arr.length)
+// If end is greater than the length, slice extracts through to the end of the sequence (arr.length)
+
+//ALSO
+// slice method can also be called to convert Array-like objects / collections to a new Array.
+
+//COME BACK TO:
+
+// see what it does for NaN/undefined/null/holes
+// write throw error
+
+
+function slice(array, begin, end) {
+ var newArray = [];
+
+ //calc length depending on end argument
+ var length = array.length;
+
+ if (end) {
+   if (end < 0) {
+     length = length + end;
+   }
+   if (!end > length) {
+     length = end;
+   }
+ }
+//  length = end < 0 ? length + end : length;
+//  length = end ? end : length;
+
+
+ //calc beginIndex
+ var beginIndex = begin ? begin : 0;
+ beginIndex = begin < 0 ? length + begin : beginIndex;
+
+ for (var i = beginIndex; i < length; i++) {
+   newArray.push(array[i]);
+ }
+
+ return newArray;
+}
+
+//tests methods
+tests ({
+  'should pass in an array as the first argument, else return error': function() {
+    fail();
+  },
+  'should not alter the original array, returns a shallow copy of elements from the original array': function(){
+    var orgArray = [1,2,3];
+    var slicedArray = slice(orgArray);
+    console.log(slicedArray)
+    eq(orgArray === slicedArray, false);
+  },
+  'if no arguments in slice, return the array': function() {
+    var orgArray = [1,2,3];
+    var slicedArray = slice(orgArray);
+    eq(slicedArray[1], 2);
+  },
+  'If begin is undefined, slice begins from index 0.': function() {
+    var orgArray = [1,2,3];
+    var slicedArray = slice(orgArray);
+    eq(slicedArray[1], 2);
+  },
+  'If begin is greater than the length of the sequence, an empty array is returned.': function() {
+    var orgArray = [1,2,3];
+    var slicedArray = slice(orgArray, 4);
+    eq(slicedArray[0], undefined);  
+    },
+  'A negative begin index can be used, indicating an offset from the end of the sequence.': function() {
+    var orgArray = [1,2,3];
+    var slicedArray = slice(orgArray, -2);
+    eq(slicedArray[0], 2);  
+  },
+  'slice extracts up to but not including end': function() {
+    var orgArray = [1,2,3];
+    var slicedArray = slice(orgArray, 0, 2);
+    eq(slicedArray[1], 2);
+  },
+  'A negative index can be used, indicating an offset from the end of the sequence.' : function() {
+    var orgArray = [1,2,3,4];
+    var slicedArray = slice(orgArray, 1, -2);
+    eq(slicedArray[0], 2);
+    eq(slicedArray.length === 1, true);
+  },
+  'If end is omitted, slice extracts through the end of the sequence': function() {
+    var orgArray = [1,2,3,4];
+    var slicedArray = slice(orgArray, 1);
+    console.log(slicedArray);
+    eq(slicedArray[2], 4);
+  },
+  'If end is greater than the length, slice extracts through to the end of the sequence': function() {
+    var orgArray = [1,2,3,4];
+    var slicedArray = slice(orgArray, 0, 12);
+    console.log(slicedArray);
+    eq(slicedArray[3], 4);
+  }
+});
+</script>

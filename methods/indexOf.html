@@ -1,0 +1,112 @@
+<script src="../simpletest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+
+//SUMMARY:
+
+// Returns the first index at which a given element can be found in the array, or -1 if it is not present.
+
+//PROTOTYPE IMPLEMENTATION:
+
+// function indexOf(array, elementToLocate, whereToStart) {
+//  var length = array.length;
+//  should loop through items and return them if array; otherwise, just return the value and push to 
+//  if (whereToStart) {
+//    for (var i = whereToStart; i < length; i++) {
+//      if (array[i] === elementToLocate) {
+//        return array[i];
+//      }
+//    }
+//  } else {
+//    for (var i = 0; i < length; i++) {
+//      if (array[i] === elementToLocate) {
+//        return array[i];
+//      }
+//    }
+//  }
+//  return -1;
+// }
+
+
+//FUNCTION SIGNATURE (the way we want it to be called):
+
+// indexOf(array, elementToLocate[, whereToStart])
+
+
+//RETURN VALUE:
+
+// The first index of the element in the array; -1 if not found.
+
+//REQUIREMENTS:
+
+// It should return a number
+// should loop through all arguments
+// if element located, exit loop and return number immediately
+// should only return one item
+// should pass in an array as the first argument
+// if first arg is not an array, return type error: TypeError: element.concat is not a function
+// if optional whereToStart, should start from that point
+// if original array is empty, return -1
+
+//COME BACK TO:
+
+// see what it does for NaN/undefined/null/holes
+// write throw error
+
+function indexOf(array, elementToLocate, whereToStart) {
+ var length = array.length;
+ if (whereToStart) {
+   for (var i = whereToStart; i < length; i++) {
+     if (array[i] === elementToLocate) {
+       return i;
+     }
+   }
+ } else {
+   for (var i = 0; i < length; i++) {
+     if (array[i] === elementToLocate) {
+       return i;
+     }
+   }
+ }
+ return -1;
+}
+
+//tests methods
+tests ({
+  'It should return a number': function() {
+    var returnedIndex = indexOf([1,2,3], 2);
+      eq(returnedIndex, 1);
+      eq(isNaN(returnedIndex), false);
+  },
+  'Should pass in an array as the first argument': function(){
+    var orgArray = [1,2,3];
+    var returnedIndex = indexOf(orgArray, 2);
+    eq(Array.isArray(orgArray), true);
+  },
+  'Should throw error if not an Array': function() {
+    fail();
+  },
+  'if item not found, return -1': function() {
+    var returnedIndex = indexOf([1,2,3], 4);
+    eq(returnedIndex, -1);
+  },
+  'if optional whereToStart, should start from that point': function() {
+    var returnedIndex = indexOf([2,3,2], 2, 1);
+    eq(returnedIndex, 2);
+  },
+  'if optional whereToStart, should start from that point and return -1 passing up earlier instance': function() {
+    var returnedIndex = indexOf([2,3,3,4], 2, 1);
+    eq(returnedIndex, -1);
+  },
+  'if original array is empty, return -1': function() {
+    var returnedIndex = indexOf([], 2, 1);
+    eq(returnedIndex, -1);
+  },
+
+  'should not recurse into nested array arguments': function() {
+    fail();
+
+  }
+});
+
+</script>
