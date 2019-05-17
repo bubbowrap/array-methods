@@ -1,0 +1,97 @@
+<script src="../simpletest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+
+//SUMMARY:
+
+// adds one or more elements to the end of an array and returns the new length of the array.
+
+// PROTOTYPE IMPLEMENTATION:
+
+// function push(array, ...args) {
+//  var newArray = array;
+//  var length = newArray.length;
+
+//  gets length of array, if args add new value for array[length + 1] = args[i];
+//  for(var i = 0; i < args.length; i++) {
+//    newArray[length + 1] = args[i];
+//    length++;
+//  }
+
+//  return newArray;
+// }
+
+
+//FUNCTION SIGNATURE (the way we want it to be called):
+
+// push(array, element);
+
+
+//RETURN VALUE:
+
+// The new length property of the object upon which the method was called.
+
+//REQUIREMENTS:
+
+// First arg should be an array, throws error otherwise.
+// The push method relies on a length property to determine where to start inserting the given values
+// should alter the original array
+// should return the length (a number)
+// If the length property cannot be converted into a number, the index used is 0
+// This includes the possibility of length being nonexistent, in which case length will also be created.
+// it should accept multiple elements
+
+//ALSO/EDGE CASES
+// If an element is undefined or null, it is converted to the empty string.
+
+//COME BACK TO:
+
+// see what it does for NaN and holes
+// write throw error
+
+
+function push(array, ...args) {
+ var newArray = array;
+ var length = newArray.length;
+
+ //gets length of array, if args add new value for array[length + 1] = args[i];
+ for(var i = 0; i < args.length; i++) {
+   length++;
+   newArray[length] = args[i];
+   
+ }
+
+ return length;
+}
+
+//tests methods
+tests ({
+  'should pass in an array as the first argument, else return error': function() {
+    fail();
+  },
+  'should return a number': function(){
+    var pushArray = push([1,2,3], 'hey');
+    eq(pushArray.length === 4, true);
+  },
+  'should return the length': function() {
+    fail();
+
+  },
+  'If the length property cannot be converted into a number, the index used is 0': function() {
+    fail();
+
+  },
+  'if length is nonexistent, create it': function() {
+    fail();
+
+
+  },
+  'it should accept multiple elements': function() {
+    fail();
+
+  },
+  'If an element is undefined or null, it is converted to the empty string.': function() {
+    fail();
+  }
+});
+</script>
