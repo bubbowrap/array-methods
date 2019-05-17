@@ -71,27 +71,18 @@ tests ({
   },
   'should return a number': function(){
     var pushArray = push([1,2,3], 'hey');
-    eq(pushArray.length === 4, true);
+    console.log(pushArray);
+    eq(pushArray === 4, true);
   },
   'should return the length': function() {
-    fail();
-
-  },
-  'If the length property cannot be converted into a number, the index used is 0': function() {
-    fail();
-
-  },
-  'if length is nonexistent, create it': function() {
-    fail();
-
-
+    var pushArray = push([1,2,3], 'hey', 1);
+    console.log(pushArray);
+    eq(pushArray === 5, true);
   },
   'it should accept multiple elements': function() {
-    fail();
-
-  },
-  'If an element is undefined or null, it is converted to the empty string.': function() {
-    fail();
+    var pushArray = push([2,3], 'hey', 1, 'wow');
+    console.log(pushArray);
+    eq(pushArray === 5, true);
   }
 });
 </script>
