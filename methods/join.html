@@ -1,0 +1,111 @@
+<script src="../simpletest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+
+//SUMMARY:
+
+// Creates and returns a new string by concatenating all of the elements in an array (or an array-like object), separated by commas or a specified separator string. If the array has only one item, then that item will be returned without using the separator.
+
+// PROTOTYPE IMPLEMENTATION:
+
+// function join(array, separator) {
+//  var length = array.length;
+//  var newString = '';
+//  var newSeparator = ',';
+//  if no separator, set variable to default to a comma
+//  if(separator) {
+//    newSeparator = separator;
+//  }
+//  loop through array, push automatically along with separator
+//  for(var i = 0; i < length; i++) {
+//    newString.concat(array[i], separator);
+//  }
+
+//  return newString;
+// }
+
+
+//FUNCTION SIGNATURE (the way we want it to be called):
+
+// join(array, separator[optional]);
+
+
+//RETURN VALUE:
+
+// A string with all array elements joined. If arr.length is 0, the empty string is returned.
+
+//REQUIREMENTS:
+
+// should pass in an array as the first argument, else return error
+// should not alter the original array
+// should return a string
+// if array is empty, it should return an empty string
+// the default separator should be a comma
+// it should accept any string as a separator
+//If the array has only one item, then that item will be returned without using the separator.
+
+//ALSO/EDGE CASES
+// If an element is undefined or null, it is converted to the empty string.
+
+//COME BACK TO:
+
+// see what it does for NaN and holes
+// write throw error
+
+
+function join(array, separator) {
+ var length = array.length;
+ var newString = '';
+ var newSeparator = ',';
+ //if separator, set variable to be whatever's passed in
+ if(separator) {
+   newSeparator = separator;
+ }
+ //loop through array, push automatically along with separator
+ for(var i = 0; i < length; i++) {
+   //if this item is undefined or null, make it empty.
+   if (array[i] === null || array[i] === undefined) {
+    newString = i !== length - 1 ? newString.concat('', newSeparator) : newString.concat('');
+
+   } else {
+    //decides whether to use a separator depending on if it's the last item in the array
+    newString = i !== length - 1 ? newString.concat(array[i], newSeparator) : newString.concat(array[i]);
+   }
+ }
+
+ return newString;
+}
+
+//tests methods
+tests ({
+  'should pass in an array as the first argument, else return error': function() {
+    fail();
+  },
+  'should return a string': function(){
+    var joinString = join(['hey', 'bros']);
+    eq(typeof joinString === 'string', true);
+  },
+  'the default separator should be a comma': function() {
+    var joinString = join(['hey', 'bros']);
+    eq(joinString === 'hey,bros', true);
+  },
+  'if array is empty, it should return an empty string': function() {
+    var joinString = join([]);
+    eq(joinString === '', true);
+  },
+  'it should accept any string as a separator': function() {
+    var joinString = join(['Me', 'you', 'Dupree'], ' + ');
+    eq(joinString === 'Me + you + Dupree', true);
+
+  },
+  'If the array has only one item, then that item will be returned without using the separator.': function() {
+    var joinString = join(['Me'], ' + ');
+    eq(joinString === 'Me', true);
+  },
+  'If an element is undefined or null, it is converted to the empty string.': function() {
+    var joinString = join([undefined, 1]);
+    console.log(joinString);
+    eq(joinString === ',1', true);
+  }
+});
+</script>
