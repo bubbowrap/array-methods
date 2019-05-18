@@ -106,14 +106,12 @@ tests ({
   'should be able to add an array as an arg': function() {
     var thisArr = [1,2];
     var unshiftedArray = unshift(thisArr,[1],[1,2]);
-    console.log(unshiftedArray);
-    eq(thisArr[1] === [1], true);
+    eq(unshiftedArray === 4, true);
   },
   'should be able to add a negative number as an arg': function() {
     var thisArr = [1,2];
     var unshiftedArray = unshift(thisArr, -1);
-    console.log(thisArr);
-    eq(thisArr[0] === -1, true);
+    eq(unshiftedArray === 3, true);
   }
 });
 </script>
