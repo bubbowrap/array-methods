@@ -1,0 +1,95 @@
+<script src="../simpletest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+
+//SUMMARY:
+
+// removes the last element from an array and returns that element. This method changes the length of the array.
+
+// PROTOTYPE IMPLEMENTATION:
+
+// function shift(array) {
+//  var newArray = array;
+//  var length = newArray.length;
+
+//  var removedItem = array[0];
+//  newArray.length--;
+
+//  return length;
+// }
+
+
+//FUNCTION SIGNATURE (the way we want it to be called):
+
+// shift(array);
+
+
+//RETURN VALUE:
+
+// The removed element from the array; undefined if the array is empty.
+
+
+
+//REQUIREMENTS:
+
+// Should remove the first element in an array
+// Should return that element
+// The method should change the length of the array.
+// If you call shift() on an empty array, it returns undefined.
+
+
+//ALSO/EDGE CASES
+//
+
+//COME BACK TO:
+
+// see what it does for NaN and holes
+// write throw error
+
+function shift(array) {
+ var newArray = array;
+ var length = array.length;
+ var removedItem;
+
+if (length === 0) {
+  removedItem = undefined;
+} else {
+ var removedItem = newArray[0];
+
+// loop through array, shift everything over one, then decrement
+  for (var i = 0; i < length - 1; i++) {
+    newArray[i] = array[i + 1];
+  }
+  newArray.length--;
+}
+ return removedItem;
+}
+
+//tests methods
+tests ({
+  'should pass in an array as the first argument, else return error': function() {
+    fail();
+  },
+  'Should remove the first element in an array': function(){
+    var thisArr = [1,2,'wow'];
+    var shiftedItem = shift(thisArr);
+    console.log(thisArr);
+    eq(thisArr[0] === 2, true);
+  },
+  'Should return that element': function() {
+    var thisArr = [1,2,'wow'];
+    var shiftedItem = shift(thisArr);
+    eq(shiftedItem === 1, true);
+  },
+  'The method should change the length of the array': function() {
+    var thisArr = [1,2,'wow'];
+    shift(thisArr);
+    eq(thisArr.length === 2, true);
+  },
+  'If you call shift() on an empty array, it returns undefined': function() {
+    var thisArr = [];
+    var shiftedItem = shift(thisArr);
+    eq(shiftedItem === undefined, true);
+  }
+});
+</script>

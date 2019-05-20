@@ -1,0 +1,89 @@
+<script src="../simpletest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+
+//SUMMARY:
+
+// removes the last element from an array and returns that element. This method changes the length of the array.
+
+// PROTOTYPE IMPLEMENTATION:
+
+// function pop(array) {
+//  var newArray = array;
+//  var length = newArray.length;
+
+//  var removedItem = array[length - 1];
+//  newArray.length--;
+
+//  return newArray;
+// }
+
+
+//FUNCTION SIGNATURE (the way we want it to be called):
+
+// pop(array);
+
+
+//RETURN VALUE:
+
+// The removed element from the array; undefined if the array is empty.
+
+
+
+//REQUIREMENTS:
+
+// Should remove the last element in an array
+// Should return that element
+// The method should change the length of the array.
+// If you call pop() on an empty array, it returns undefined.
+
+
+//ALSO/EDGE CASES
+// If an element is undefined or null, it is converted to the empty string.
+
+//COME BACK TO:
+
+// see what it does for NaN and holes
+// write throw error
+
+function pop(array) {
+ var newArray = array;
+ var length = newArray.length;
+ var removedItem;
+
+if (length === 0) {
+  removedItem = undefined;
+} else {
+ var removedItem = newArray[length - 1];
+ newArray.length--;
+}
+ return removedItem;
+}
+
+//tests methods
+tests ({
+  'should pass in an array as the first argument, else return error': function() {
+    fail();
+  },
+  'Should remove the last element in an array': function(){
+    var thisArr = [1,2,'wow'];
+    var poppedItem = pop(thisArr);
+    eq(poppedItem === 'wow', true);
+  },
+  'Should return that element': function() {
+    var thisArr = [1,2,'wow'];
+    var poppedItem = pop(thisArr);
+    eq(poppedItem === 'wow', true);
+  },
+  'The method should change the length of the array': function() {
+    var thisArr = [1,2,'wow'];
+    var poppedItem = pop(thisArr);
+    eq(thisArr.length === 2, true);
+  },
+  'If you call pop() on an empty array, it returns undefined': function() {
+    var thisArr = [];
+    var poppedItem = pop(thisArr);
+    eq(poppedItem === undefined, true);
+  }
+});
+</script>

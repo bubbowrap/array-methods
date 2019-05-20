@@ -1,0 +1,117 @@
+<script src="../simpletest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+
+//SUMMARY:
+
+// adds one or more elements to the beginning of an array and returns the new length of the array.
+
+// PROTOTYPE IMPLEMENTATION:
+
+// function unshift(array, ...args) {
+//  var newArray = array;
+//  var arrayLength = newArray.length;
+//  var argsLength = args.length;
+// [1,2,3][4,5]
+// move everything over to the right by the amount of args passed in, assign it to length + args
+// for (var i = 0; i < arrayLength; i++) {
+//  newArray[arrayLength + argsLength] = newArray[arrayLength - 1];
+//  i--;
+// for (var i = 0; i <= argsLength; i++) {
+//  newArray[argsLength - 1] = args[argsLength - 1];
+//  argsLength--;
+// }
+// loop through args, assign newArray[0] = args[0 + args.length]; args.length--
+// }
+//  return arrayLength;
+// }
+
+
+//FUNCTION SIGNATURE (the way we want it to be called):
+
+// shift(array);
+
+
+//RETURN VALUE:
+
+// The new length property of the object upon which the method was called.
+
+
+//REQUIREMENTS:
+
+// Should accept an array as the first arg, otherwise throw error
+// Should add the args to the front of the array in ascending order 
+// Should return the new length (number)
+// if no args, return the original array
+// should be able to add an array as an arg
+// should be able to add a negative number as an arg
+// If you call unshift() on an empty array, it returns 0.
+
+//ALSO/EDGE CASES
+//
+
+//COME BACK TO:
+
+// see what it does for NaN and holes
+// write throw error
+[3,4][1,2]
+function unshift(array, ...args) {
+ if (args) {
+  var newArray = [];
+  var arrayLength = array.length;
+  var arrayIndex = array.length - 1;
+  var argsLength = args.length;
+  var argsIndex = args.length - 1;
+//move everything over to the right by the amount of args passed in, assign it to arrayIndex + argsLength
+  for (var i = 0; i < arrayLength; i++) {
+    newArray[arrayIndex + argsLength] = array[arrayIndex];
+    arrayIndex--;
+  }
+  for (var i = 0; i < argsLength; i++) {
+    newArray[argsIndex] = args[i];
+    argsIndex--;
+  }
+  arrayLength = newArray.length;
+}
+//loop through args, assign newArray[argsIndex] = args[i]; argsIndex--
+
+ return arrayLength;
+}
+
+//tests methods
+tests ({
+  'should pass in an array as the first argument, else return error': function() {
+    fail();
+  },
+  'Should add the args to the front of the array in ascending order': function(){
+    var thisArr = [3,4];
+    unshift(thisArr,1,2,3);
+    eq(thisArr[0] === 3, true);
+  },
+  'Should return the new length (number)': function() {
+    var thisArr = [1,2,'wow'];
+    var unshiftedArray = unshift(thisArr, 3, 5);
+    eq(unshiftedArray === 5, true);
+  },
+  'if no args, return the original array length': function() {
+    var thisArr = [1,2];
+    unshift(thisArr);
+    eq(thisArr.length === 2, true);
+  },
+  'If you call unshift() on an empty array, it returns 0': function() {
+    var thisArr = [];
+    var unshiftedArray = unshift(thisArr);
+    eq(unshiftedArray === 0, true);
+  },
+  'should be able to add an array as an arg': function() {
+    var thisArr = [1,2];
+    var unshiftedArray = unshift(thisArr,[1],[1,2]);
+    eq(unshiftedArray === 4, true);
+  },
+  'should be able to add a negative number as an arg': function() {
+    var thisArr = [1,2];
+    var unshiftedArray = unshift(thisArr, -1);
+    eq(unshiftedArray === 3, true);
+  }
+});
+</script>
