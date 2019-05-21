@@ -1,0 +1,128 @@
+<script src="../simpletest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+
+//SUMMARY:
+
+//  fills (modifies) all the elements of an array from a start index (default zero) to an end index (default array length) with a static value. It returns the modified array.
+
+// PROTOTYPE IMPLEMENTATION:
+
+// function fill(array, value, start, end) {
+//   var array = array;
+//   var startIndex = 0;
+//   var endIndex = array.length;
+//   //if start arg, set startindex to that; otherwise change nothing
+//   start ? startIndex = start : startIndex;
+//   end ? endIndex = end : endIndex;
+//   //should loop through array starting at start value and ending at end value, replacing array[i] with the value.
+//   for(var startIndex; i < endIndex; startIndex++) {
+//     newArray[startInddx] = value;
+//   }
+// return array;
+// }
+
+//FUNCTION SIGNATURE (the way we want it to be called):
+
+// fill(array, value, start[optional], end[optional]]);
+
+
+//RETURN VALUE:
+
+// The modified array.
+
+
+//REQUIREMENTS:
+
+// Takes up to three arguments: value, start and end
+// should return an array
+
+// if no start argument, default to 0
+// if start is negative, it is treated as length+start
+// if no end argument, default to length of this object
+// if end is negative, it is treated as length+end
+// if empty, just return the empty array
+// if no start or end, fill the entire array 
+// it does not require that its this value be an Array object.
+// it is mutable, it will change this object itself, and return it, not just a copy.
+
+//ALSO/EDGE CASES
+//When fill gets passed an object, it will copy the reference and fill the array with references to that object.
+
+//COME BACK TO:
+
+// see what it does for NaN and holes
+// write throw error
+
+function fill(array, value, start, end) {
+  var array = array;
+  var startIndex = 0;
+  var arrayLength = array.length;
+  var endIndex = array.length;
+
+  //if start arg, set startindex to that; otherwise change nothing
+  if (start) {
+    if (start < 0) {
+      startIndex = start + arrayLength;
+    } else {
+      startIndex = start;
+    }
+  }
+
+  if (end) {
+    if(end < 0) {
+      endIndex = end + arrayLength;
+    } else {
+      endIndex = end;
+    }
+  }
+
+  //should loop through array starting at start value and ending at end value, replacing array[i] with the value.
+  for(var startIndex; startIndex < endIndex; startIndex++) {
+    array[startIndex] = value;
+  }
+  return array;
+}
+
+//tests methods
+tests ({
+  'should pass in an array as the first argument, else return error': function() {
+    fail();
+  },
+  'should return an array': function(){
+    var thisArr = [1,2,'wow'];
+    fill(thisArr, 5);
+    eq(Array.isArray(thisArr), true);
+  },
+  'it should only start at the start index': function() {
+    var thisArr = [1,2,'wow'];
+    fill(thisArr, 5, 1);
+    eq(thisArr[0] === 1, true);
+  },
+  'if no start argument, default to 0': function() {
+    var thisArr = [1,2,'wow'];
+    fill(thisArr, 5);
+    eq(thisArr[0] === 5, true);
+  },
+  'if start is negative, it is treated as length+start': function() {
+    var thisArr = [1,2,'wow'];
+    fill(thisArr, 5, -2);
+    eq(thisArr[0] === 1, true);
+  },
+  'if no end argument, default to length of this object': function() {
+    var thisArr = [1,2,'wow'];
+    fill(thisArr, 5);
+    eq(thisArr[2] === 5, true);
+  },
+  'if end is negative, it is treated as length+end': function() {
+    var thisArr = [1,2,'wow'];
+    fill(thisArr, 5, 0, -2);
+    eq(thisArr[0] === 5, true);
+  },
+  'it is mutable, it will change this object itself, and return it, not just a copy.': function( ) {
+    var thisArr = [1,2,'wow'];
+    fill(thisArr);
+    eq(thisArr === thisArr, true);
+  }
+});
+</script>
