@@ -1,6 +1,7 @@
 <script src="../simpletest.js"></script>
 <!-- <script src="adder.js"></script> -->
 <script>
+ //coming back to this later; logic is a bit more than I can wrap my head around atm.
 
 //SUMMARY:
 
@@ -9,6 +10,15 @@
 // PROTOTYPE IMPLEMENTATION:
 
 function sort(array, compareFunction) {
+  var newArray = [];
+  var arrayLength = array.length;
+  //if compareFunc, for loop with callback/compare func
+    for (var i = 0; i < arrayLength; i++) {
+      if(compareFunction(array[i])) {
+        if 
+        newArray.push(array[i]);
+      }
+    }
 
 
   return newArray;
@@ -16,7 +26,7 @@ function sort(array, compareFunction) {
 
 //FUNCTION SIGNATURE (the way we want it to be called):
 
-// sort(array, target, start[optional], end[optional]);
+// sort(array, compareFunction);
 
 
 //RETURN VALUE:
@@ -27,29 +37,26 @@ function sort(array, compareFunction) {
 //REQUIREMENTS:
 
 // should return an array
-// sequence should be copied to the target.
-// If negative, target will be counted from the end.
-// If target is at or greater than arr.length, nothing will be copied
-// If target is positioned after start, the copied sequence will be trimmed to fit arr.length.
-// if no target, just return the array
-// element should start copying from index passed into start
-// if negative, start should be counted from the end
-// if start is omitted, it should copy from index 0
-// element should stop copying up to but not including the end
-// if negative, end will be counted from the end
-// if end is omitted, it should count until the last index (arr.length)
+// should accept a callback/compare function to define sort order
+// If compare function omitted, should convert array lements to strings and according to character's unicode code point value
+// should accept a first + second element to the compare function
+// In a numeric sort, 9 comes before 80, but because numbers are converted to strings, "80" comes before "9" in the Unicode order. 
+// All undefined elements are sorted to the end of the array.
+// If compareFunction(a, b) is less than 0, sort a to an index lower than b (i.e. a comes first).
+// If compareFunction(a, b) returns 0, leave a and b unchanged with respect to each other, but sorted with respect to all different elements.
+// If compareFunction(a, b) is greater than 0, sort b to an index lower than a (i.e. b comes first).
+// compareFunction(a, b) must always return the same value when given a specific pair of elements a and b as its two arguments.
+// If inconsistent results are returned, then the sort order is undefined.
+// The sort method can be conveniently used with function expressions:
 // if empty, just return the empty array
-
-// pasted sequence will have the copied values even when the copy and paste region overlap.
-// It should be mutable 
-// It does not alter the length of this, but it will change its content and create new properties, if necessary.
+// It should be mutable (returns sorted array)
 
 //ALSO/EDGE CASES
 
 //COME BACK TO:
 
 // see what it does for NaN and holes
-// write throw error
+// write throw error if not array
 
 
 
@@ -60,70 +67,12 @@ tests ({
     eq(Array.isArray(thisArr), true);
   },
   'sequence should be copied to the target': function(){
-    var thisArr = [1,2,3,4];
-    var cwArray = copyWithin(thisArr, 1);
+    var thisArr = [4, 2, 5, 1, 3];
+    var sortedArray = sort(thisArr, function(a, b) {
+      return a - b;
+    });
+    console.log(sortedArray);
     eq(thisArr[1] === 1, true);
-  },
-  'If negative, target will be counted from the end.': function(){
-    var cwArray = copyWithin([1, 2, 3, 4, 5], -2, -3, -1);
-    eq(cwArray[3] === 3, true);
-    eq(cwArray[4] === 4, true);
-  },
-  'If target is at or greater than arr.length, nothing will be copied': function() {
-    var cwArray = copyWithin([1, 2, 3, 4, 5], 5, -3, -1);
-    eq(cwArray[3] === 4, true);
-    eq(cwArray[4] === 5, true);  
-  },
-  'If target is positioned after start, the copied sequence will be trimmed to fit arr.length': function() {
-    var orgArray = [1, 2, 3, 4, 5];
-    var cwArray = copyWithin(orgArray, 5, -3, -1);
-    eq(orgArray.length === cwArray.length, true);
-  },
-  'if no target, just return the array': function() {
-    var orgArray = [1, 2, 3, 4, 5];
-    var cwArray = copyWithin(orgArray);
-    console.log(cwArray);
-    eq(orgArray == cwArray, true);  
-  },
-  'element should start copying from index passed into start': function() {
-    fail();
-  },
-  'if start is omitted, it should copy from index 0': function() {
-    fail();
-  },
-  'if negative, start should be counted from the end': function() {
-    fail();
-  },
-  'element should stop copying up to but not including the end': function() {
-    fail();
-  },
-  'if end is omitted, it should count until the last index (arr.length)': function() {
-    var orgArray = [1, 2, 3, 4, 5];
-    var cwArray = copyWithin(orgArray, 3, 4);
-    console.log(cwArray);
-    eq(cwArray[4] == 5, true);
-  },
-  'if negative, end will be counted from the end': function() {
-    var orgArray = [1, 2, 3, 4, 5];
-    var cwArray = copyWithin(orgArray, 3, 0, -3);
-    console.log(cwArray);
-    eq(cwArray[3] == 1, true);
-    eq(cwArray[4] == 2, true);
-  },
-  'if array is empty, just return the empty array': function() {
-    var orgArray = [];
-    var cwArray = copyWithin(orgArray, 1, 2, 3);
-    console.log(cwArray);
-    eq(orgArray == cwArray, true);    
-  },
-  'pasted sequence will have the copied values even when the copy and paste region overlap': function() {
-    fail();
-  },
-  'It should be mutable': function() {
-    fail();
-  },
-  'It does not alter the length of this, but it will change its content and create new properties, if necessary.': function() {
-    fail();
   }
 });
 </script>

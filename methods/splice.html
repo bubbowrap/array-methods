@@ -1,0 +1,152 @@
+<script src="../simpletest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+
+//SUMMARY:
+
+// Changes the contents of an array by removing or replacing existing elements and/or adding new elements
+
+// PROTOTYPE IMPLEMENTATION:
+
+function splice(array, start, deleteCount, ...args) {
+ var arrayLength = array.length;
+ var newArray = [];
+ var startIndex;
+
+  //calculate startIndex
+  if(start > arrayLength) {
+    startIndex = arrayLength;
+  } else if (start < 0) {
+    startIndex = arrayLength + start;
+  } else {
+    startIndex = start;
+  }
+
+  //calculate deleteCount
+  if (deleteCount) {
+    if (deleteCount >= arrayLength - start) {
+      deleteCount = arrayLength - start;
+    }
+    if (deleteCount <= 0) {
+      return;
+    }
+    //loop through array starting at i and push startIndex + i to new array for deleteCount number of times. Then delete startIndex
+    for (var i = 0; i < deleteCount; i++) {
+      //push to new array
+      newArray.push(array[startIndex + i]);
+      //if arguments replace with args[i]
+      if(args.length > 0) {
+        array[startIndex + i] = args[i];
+      } 
+      //if no arguments just loop through move everything down and decrement length of the array
+      else {
+        for(var j = 1; j < arrayLength; j++) {
+          array[startIndex + i] = array[startIndex + j];
+        }
+        array.length--;
+      }
+    }
+  }
+
+
+  //if arguments, replace items 
+  if (args) {
+    for (var i = 0; i < args.length; i++) {
+      array[startIndex + i] = args[i];
+    }
+  }
+
+ return newArray;
+}
+
+
+//FUNCTION SIGNATURE (the way we want it to be called):
+
+// splice(array, start, deleteCount(optional), args(optional));
+
+
+//RETURN VALUE:
+
+// An array containing the deleted elements.
+
+//REQUIREMENTS:
+
+// should return an array
+// it should start at the 'start' index.
+// If start is greater than the length of the array, it will be set to the length of the array
+// If start is negative, it will begin that many elements from the end of the array
+// If the specified number of elements to insert differs from the number of elements being removed, the array's length will be different at the end of the call. 
+// deleteCount should indicate the number of elements in the array to remove from start
+// if deleteCount is omitted, all the elements from start to the end of the array will be deleted
+// if deleteCount is equal to or larger than array.length - start, then all the elements from start to the end of the array will be deleted
+// If deleteCount is 0 or negative, no elements are removed.
+//  If you do not specify any elements, splice() will only remove elements from the array.
+// If only one element is removed, an array of one element is returned. 
+// If no elements are removed, an empty array is returned.
+
+//ALSO
+
+
+//COME BACK TO:
+
+// see what it does for NaN/undefined/null/holes
+// write throw error
+
+
+//tests methods
+tests ({
+  'should pass in an array as the first argument, else return error': function() {
+    fail();
+  },
+  'should return an array': function(){
+    var orgArray = ['one', 'two', 'three', 'four'];
+    var newArray = splice(orgArray, 2, 1);
+    console.log(newArray);
+    console.log(orgArray);
+    eq(newArray[0] === 'one', true);
+  },
+  'it should start at the start index': function() {
+    fail();
+  },
+  'if start is greater than the length of the array, it will be set to the length of the array': function() {
+    fail();
+
+  },
+  'if start is negative, it will begin that many elements from the end of the array': function() {
+    fail();
+
+  },
+  'f the specified number of elements to insert differs from the number of elements being removed, the array\'s length will be different at the end of the call': function() {
+    fail();
+
+  },
+  'deleteCount should indicate the number of elements in the array to remove from start': function() {
+    fail();
+
+  },
+  'if deleteCount is omitted, all the elements from start to the end of the array will be deleted': function() {
+    fail();
+
+  },
+  'if deleteCount is equal to or larger than array.length - start, then all the elements from start to the end of the array will be deleted': function() {
+    fail();
+
+  },
+  'if deleteCount is 0 or negative, no elements are removed': function() {
+    fail();
+
+  },
+  'if you do not specify any elements, splice() will only remove elements from the array.': function() {
+    fail();
+
+  },
+  'if only one element is removed, an array of one element is returned': function() {
+    fail();
+
+  },
+  'if no elements are removed, an empty array is returned.': function() {
+    fail();
+
+  }
+});
+</script>
