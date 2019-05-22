@@ -12,14 +12,24 @@ function copyWithin(array, target, start, end) {
   var newArray = array;
   var startIndex = 0;
   var copiedSequence = [];
-  var targetIndex = target;
+  var targetIndex;
   var endIndex = array.length;
   var arrayLength = array.length;
+  var arrayIndex = array.length - 1;
+
+  // calculate target
+
+
+  if (target < 0) {
+    targetIndex = arrayLength + target;
+  } else {
+    targetIndex = target;
+  }
 
   //calculate startIndex if it exists
   if (start) {
     if (start < 0) {
-      startIndex = arrayLength + startIndex;
+      startIndex = arrayLength + start;
     } else {
       startIndex = start;
     }
@@ -28,7 +38,7 @@ function copyWithin(array, target, start, end) {
   //calculate startIndex if it exists
   if (end) {
     if (end < 0) {
-      endIndex = arrayLength + endIndex;
+      endIndex = arrayLength + end;
     } else {
       endIndex = end;
     }
@@ -43,10 +53,12 @@ function copyWithin(array, target, start, end) {
 
   //then find the target, shift everything after it down by the length of the copied sequence, and paste it in the recently vacated spots; should be the same length as the array.
   for(var i = 0; i < copiedSequenceLength; i++) {
-    newArray[target + i] = copiedSequence[i];
+    if (newArray[i] < arrayLength) {
+      newArray[targetIndex + i] = copiedSequence[i];
+    }
   }
 
-  return array;
+  return newArray;
 }
 
 //FUNCTION SIGNATURE (the way we want it to be called):
@@ -98,7 +110,52 @@ tests ({
     var thisArr = [1,2,3,4];
     var cwArray = copyWithin(thisArr, 1);
     console.log(cwArray);
-    eq(thisArr[1] === 3, true);
+    eq(thisArr[1] === 1, true);
+  },
+  'If negative, target will be counted from the end.': function(){
+    var cwArray = copyWithin([1, 2, 3, 4, 5], -2, -3, -1);
+    console.log(cwArray);
+    eq(cwArray[3] === 3, true);
+    eq(cwArray[4] === 4, true);
+  },
+  'If target is at or greater than arr.length, nothing will be copied': function() {
+    fail();
+  },
+  'If target is positioned after start, the copied sequence will be trimmed to fit arr.length': function() {
+    fail();
+  },
+  'if no target, just return the array': function() {
+    fail();
+  },
+  'element should start copying from index passed into start': function() {
+    fail();
+  },
+  'if start is omitted, it should copy from index 0': function() {
+    fail();
+  },
+  'if negative, start should be counted from the end': function() {
+    fail();
+  },
+  'element should stop copying up to but not including the end': function() {
+    fail();
+  },
+  'if end is omitted, it should count until the last index (arr.length)': function() {
+    fail();
+  },
+  'if negative, end will be counted from the end': function() {
+    fail();
+  },
+  'if array is empty, just return the empty array': function() {
+    fail();
+  },
+  'pasted sequence will have the copied values even when the copy and paste region overlap': function() {
+    fail();
+  },
+  'It should be mutable': function() {
+    fail();
+  },
+  'It does not alter the length of this, but it will change its content and create new properties, if necessary.': function() {
+    fail();
   }
 });
 </script>
