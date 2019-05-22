@@ -4,77 +4,24 @@
 
 //SUMMARY:
 
-// shallow copies part of an array to another location in the same array and returns it without modifying its length.
+// sorts the elements of an array in place and returns the sorted array. The default sort order is built upon converting the elements into strings, then comparing their sequences of UTF-16 code units values.
 
 // PROTOTYPE IMPLEMENTATION:
 
-function copyWithin(array, target, start, end) {
-  var newArray = array;
-  var startIndex = 0;
-  var copiedSequence = [];
-  var targetIndex;
-  var endIndex = array.length;
-  var arrayLength = array.length;
-  var arrayIndex = array.length - 1;
+function sort(array, compareFunction) {
 
-  // calculate target
-
-
-  if (target < 0) {
-    targetIndex = arrayLength + target;
-  } else if (target === undefined) {
-    return newArray;
-  } else {
-    targetIndex = target;
-  }
-
-  //calculate startIndex if it exists
-  if (start) {
-    if (start < 0) {
-      startIndex = arrayLength + start;
-    } else {
-      startIndex = start;
-    }
-  }
-
-  //calculate startIndex if it exists
-  if (end) {
-    if (end < 0) {
-      endIndex = arrayLength + end;
-    } else {
-      endIndex = end;
-    }
-  }
-
-  //copy the sequence start and end index first
-  for (startIndex; startIndex < endIndex; startIndex++) {
-    copiedSequence.push(array[startIndex]);
-  }
-
-  var copiedSequenceLength = copiedSequence.length;
-
-  //then find the target, shift everything after it down by the length of the copied sequence, and paste it in the recently vacated spots; should be the same length as the array.
-  for(var i = 0; i < copiedSequenceLength; i++) {
-    if (newArray[i] < arrayLength) {
-      newArray[targetIndex + i] = copiedSequence[i];
-    }
-  }
-  //trims new array to match old array
-  while (newArray.length > arrayLength) {
-    newArray.pop();
-  }
 
   return newArray;
 }
 
 //FUNCTION SIGNATURE (the way we want it to be called):
 
-// copyWithin(array, target, start[optional], end[optional]);
+// sort(array, target, start[optional], end[optional]);
 
 
 //RETURN VALUE:
 
-// The modified array.
+// The sorted array. Note that the array is sorted in place, and no copy is made.
 
 
 //REQUIREMENTS:
