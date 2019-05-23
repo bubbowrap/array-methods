@@ -1,0 +1,92 @@
+<script src="../simpletest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+
+//SUMMARY:
+
+//  reverses an array in place. The first array element becomes the last, and the last array element becomes the first.
+
+// PROTOTYPE IMPLEMENTATION:
+
+// function reverse(array) {
+//   var array = array;
+//   var arrayLength = array.length;
+//   var arrayIndex = array.length - 1;
+//   var i = 0;
+//   //loop through array backwards, assign array.length - 1 to array[0], decrement until array.length = 0;
+//     for (var arrayIndex; arrayIndex >= 0; arrayIndex--) {
+//       array[i] = array[arrayIndex];
+//       i++;
+//     }
+//   return array;
+// }
+
+//FUNCTION SIGNATURE (the way we want it to be called):
+
+// reverse(array);
+
+
+//RETURN VALUE:
+
+// The reversed array.
+
+
+//REQUIREMENTS:
+
+// should return an array
+// it is mutable, it will change this object itself, and return it, not just a copy.
+// if empty, just return the empty array
+
+
+//ALSO/EDGE CASES
+//When fill gets passed an object, it will copy the reference and fill the array with references to that object.
+
+//COME BACK TO:
+
+// see what it does for NaN and holes
+// write throw error
+
+function reverse(array) {
+  var newArray = [];
+  var arrayLength = array.length;
+  var arrayIndex = array.length - 1;
+  var i = 0;
+  //loop through array backwards, assign array.length - 1 to array[0], decrement until array.length = 0;
+    for (arrayIndex; arrayIndex >= 0; arrayIndex--) {
+      newArray[i] = array[arrayIndex];
+      i++;
+    }
+  return newArray;
+}
+
+//tests methods
+tests ({
+  'should pass in an array as the first argument, else return error': function() {
+    fail();
+  },
+  'should return an array': function(){
+    var thisArr = [1,2,'wow'];
+    reverse(thisArr);
+    eq(Array.isArray(thisArr), true);
+  },
+  'should return the reversed array': function() {
+    var thisArr = [1,2,3];
+    var reversed = reverse(thisArr);
+    console.log(reversed);
+    eq(reversed[0] === 3, true);
+    eq(reversed[2] === 1, true);
+
+  },
+  'if empty, just return the empty array': function() {
+    var thisArr = [];
+    reverse(thisArr);
+    console.log(thisArr);
+    eq(thisArr[0] === undefined, true);
+  },
+  'it is mutable, it will change this object itself, and return it, not just a copy.': function( ) {
+    var thisArr = [1,2,'wow'];
+    reverse(thisArr);
+    eq(thisArr === thisArr, true);
+  }
+});
+</script>

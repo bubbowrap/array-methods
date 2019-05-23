@@ -1,0 +1,182 @@
+<script src="../simpletest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+
+//SUMMARY:
+
+// shallow copies part of an array to another location in the same array and returns it without modifying its length.
+
+// PROTOTYPE IMPLEMENTATION:
+
+function copyWithin(array, target, start, end) {
+  var newArray = array;
+  var startIndex = 0;
+  var copiedSequence = [];
+  var targetIndex;
+  var endIndex = array.length;
+  var arrayLength = array.length;
+  var arrayIndex = array.length - 1;
+
+  // calculate target
+
+
+  if (target < 0) {
+    targetIndex = arrayLength + target;
+  } else if (target === undefined) {
+    return newArray;
+  } else {
+    targetIndex = target;
+  }
+
+  //calculate startIndex if it exists
+  if (start) {
+    if (start < 0) {
+      startIndex = arrayLength + start;
+    } else {
+      startIndex = start;
+    }
+  }
+
+  //calculate startIndex if it exists
+  if (end) {
+    if (end < 0) {
+      endIndex = arrayLength + end;
+    } else {
+      endIndex = end;
+    }
+  }
+
+  //copy the sequence start and end index first
+  for (startIndex; startIndex < endIndex; startIndex++) {
+    copiedSequence.push(array[startIndex]);
+  }
+
+  var copiedSequenceLength = copiedSequence.length;
+
+  //then find the target, shift everything after it down by the length of the copied sequence, and paste it in the recently vacated spots; should be the same length as the array.
+  for(var i = 0; i < copiedSequenceLength; i++) {
+    if (newArray[i] < arrayLength) {
+      newArray[targetIndex + i] = copiedSequence[i];
+    }
+  }
+  //trims new array to match old array
+  while (newArray.length > arrayLength) {
+    newArray.pop();
+  }
+
+  return newArray;
+}
+
+//FUNCTION SIGNATURE (the way we want it to be called):
+
+// copyWithin(array, target, start[optional], end[optional]);
+
+
+//RETURN VALUE:
+
+// The modified array.
+
+
+//REQUIREMENTS:
+
+// should return an array
+// sequence should be copied to the target.
+// If negative, target will be counted from the end.
+// If target is at or greater than arr.length, nothing will be copied
+// If target is positioned after start, the copied sequence will be trimmed to fit arr.length.
+// if no target, just return the array
+// element should start copying from index passed into start
+// if negative, start should be counted from the end
+// if start is omitted, it should copy from index 0
+// element should stop copying up to but not including the end
+// if negative, end will be counted from the end
+// if end is omitted, it should count until the last index (arr.length)
+// if empty, just return the empty array
+
+// pasted sequence will have the copied values even when the copy and paste region overlap.
+// It should be mutable 
+// It does not alter the length of this, but it will change its content and create new properties, if necessary.
+
+//ALSO/EDGE CASES
+
+//COME BACK TO:
+
+// see what it does for NaN and holes
+// write throw error
+
+
+
+//tests methods
+tests ({
+  'should pass in an array as the first argument, else return error': function() {
+    fail();
+    eq(Array.isArray(thisArr), true);
+  },
+  'sequence should be copied to the target': function(){
+    var thisArr = [1,2,3,4];
+    var cwArray = copyWithin(thisArr, 1);
+    eq(thisArr[1] === 1, true);
+  },
+  'If negative, target will be counted from the end.': function(){
+    var cwArray = copyWithin([1, 2, 3, 4, 5], -2, -3, -1);
+    eq(cwArray[3] === 3, true);
+    eq(cwArray[4] === 4, true);
+  },
+  'If target is at or greater than arr.length, nothing will be copied': function() {
+    var cwArray = copyWithin([1, 2, 3, 4, 5], 5, -3, -1);
+    eq(cwArray[3] === 4, true);
+    eq(cwArray[4] === 5, true);  
+  },
+  'If target is positioned after start, the copied sequence will be trimmed to fit arr.length': function() {
+    var orgArray = [1, 2, 3, 4, 5];
+    var cwArray = copyWithin(orgArray, 5, -3, -1);
+    eq(orgArray.length === cwArray.length, true);
+  },
+  'if no target, just return the array': function() {
+    var orgArray = [1, 2, 3, 4, 5];
+    var cwArray = copyWithin(orgArray);
+    console.log(cwArray);
+    eq(orgArray == cwArray, true);  
+  },
+  'element should start copying from index passed into start': function() {
+    fail();
+  },
+  'if start is omitted, it should copy from index 0': function() {
+    fail();
+  },
+  'if negative, start should be counted from the end': function() {
+    fail();
+  },
+  'element should stop copying up to but not including the end': function() {
+    fail();
+  },
+  'if end is omitted, it should count until the last index (arr.length)': function() {
+    var orgArray = [1, 2, 3, 4, 5];
+    var cwArray = copyWithin(orgArray, 3, 4);
+    console.log(cwArray);
+    eq(cwArray[4] == 5, true);
+  },
+  'if negative, end will be counted from the end': function() {
+    var orgArray = [1, 2, 3, 4, 5];
+    var cwArray = copyWithin(orgArray, 3, 0, -3);
+    console.log(cwArray);
+    eq(cwArray[3] == 1, true);
+    eq(cwArray[4] == 2, true);
+  },
+  'if array is empty, just return the empty array': function() {
+    var orgArray = [];
+    var cwArray = copyWithin(orgArray, 1, 2, 3);
+    console.log(cwArray);
+    eq(orgArray == cwArray, true);    
+  },
+  'pasted sequence will have the copied values even when the copy and paste region overlap': function() {
+    fail();
+  },
+  'It should be mutable': function() {
+    fail();
+  },
+  'It does not alter the length of this, but it will change its content and create new properties, if necessary.': function() {
+    fail();
+  }
+});
+</script>
